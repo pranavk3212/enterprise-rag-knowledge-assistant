@@ -1,0 +1,29 @@
+[project]
+name = "enterprise-rag-assistant"
+version = "0.1.0"
+description = "A cited RAG assistant for internal enterprise documents"
+requires-python = ">=3.10"
+dependencies = [
+  "chromadb>=0.5.0",
+  "ollama>=0.4.0",
+  "pydantic>=2.7.0",
+  "python-dotenv>=1.0.1",
+  "pypdf>=4.2.0",
+  "streamlit>=1.37.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.2.0"]
+
+[project.scripts]
+rag = "enterprise_rag.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

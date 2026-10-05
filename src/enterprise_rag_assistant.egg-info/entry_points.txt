@@ -1,0 +1,2 @@
+[console_scripts]
+rag = enterprise_rag.cli:main
