@@ -37,7 +37,7 @@ def main() -> None:
     print(f"Average end-to-end latency (5 questions): {avg_latency:.3f} s")
 
     start = time.perf_counter()
-    # Reuse the production evaluation command's exact 33-question workload.
+    # Reuse the production evaluation command's exact evaluation workload.
     from enterprise_rag.cli import evaluate
     evaluate()
     evaluation_elapsed = time.perf_counter() - start
