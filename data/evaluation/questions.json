@@ -31,5 +31,15 @@
   {"question": "What approval is needed for purchases above $10,000?", "expected_source": "procurement_policy.md"},
   {"question": "Who coordinates response activities during a major operational disruption?", "expected_source": "business_continuity_policy.md"},
   {"question": "What is the recovery-time objective for critical business services?", "expected_source": "business_continuity_policy.md"},
-  {"question": "How often must critical-service recovery procedures be tested?", "expected_source": "business_continuity_policy.md"}
+  {"question": "How often must critical-service recovery procedures be tested?", "expected_source": "business_continuity_policy.md"},
+  {"question": "After how many days of no use should I send my company laptop back?", "expected_source": "security_policy.md"},
+  {"question": "Do staff have to turn on two-factor authentication for work systems?", "expected_source": "security_policy.md"},
+  {"question": "What work-from-home schedule needs a manager's approval?", "expected_source": "remote_work.md"},
+  {"question": "Can I move unused vacation days into the following year?", "expected_source": "benefits.md"},
+  {"question": "Besides a manager, who can receive a harassment concern?", "expected_source": "code_of_conduct.md"},
+  {"question": "What is the per-night hotel spending limit for domestic trips?", "expected_source": "expense_policy.md"},
+  {"question": "When should I involve People Operations after being ill for several days?", "expected_source": "leave_policy.md"},
+  {"question": "By when must a new employee confirm a laptop asset tag?", "expected_source": "onboarding_policy.md"},
+  {"question": "How do I escalate a possible privacy breach?", "expected_source": "data_privacy_policy.md"},
+  {"question": "Who has to approve a $12,000 purchase?", "expected_source": "procurement_policy.md"}
 ]
