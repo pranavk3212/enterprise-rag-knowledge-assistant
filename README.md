@@ -81,6 +81,16 @@ User question ──► semantic Top-3 retrieval
    rag evaluate
    ```
 
+## Performance benchmark
+
+Run the benchmark on the same machine where Ollama and the local models are installed:
+
+```powershell
+python scripts/benchmark.py
+```
+
+It reports the current ChromaDB collection size, average end-to-end latency across five questions, total runtime for the 33-question evaluation set, and refusal accuracy on 10 unanswerable questions. Because inference is local, timing results are machine-dependent and should be reported with the hardware/model configuration used.
+
 ## Add your own knowledge base
 
 Place `.md`, `.txt`, or `.pdf` files in `data/documents/`, run `rag ingest`, and edit `data/evaluation/questions.json` to match your documents. `rag ingest` recreates the local index so stale document chunks cannot remain in retrieval results. Do not add confidential material to a public repository.
