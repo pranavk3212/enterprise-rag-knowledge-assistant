@@ -4,9 +4,11 @@ A portfolio-ready Retrieval-Augmented Generation (RAG) system for answering ques
 
 ## Project results
 
-| Evaluation set | Top-3 retrieval hit rate | Citation-grounded answer rate |
-| --- | ---: | ---: |
-| 13 AcmeWorks policy documents · 33 questions | **100.0%** | **100.0%** |
+| Evaluation set | Top-1 retrieval | Top-3 retrieval | Citation-grounded answers |
+| --- | ---: | ---: | ---: |
+| 43 answerable questions across 13 AcmeWorks policy documents | **86.0%** | **100.0%** | **100.0%** |
+| 10 paraphrased questions | — | **100.0%** | — |
+| 10 unanswerable questions | — | — | **90.0% refusal accuracy** |
 
 The AcmeWorks policies are fictional and included only as a demonstration knowledge base.
 
@@ -17,7 +19,7 @@ The AcmeWorks policies are fictional and included only as a demonstration knowle
 - Embeds chunks with local `nomic-embed-text` and stores them locally in Chroma
 - Retrieves the top 3 relevant chunks, then prompts the model to answer only from that evidence
 - Adds retrieved source labels such as `[security_policy.md · chunk 2]` to every answer
-- Evaluates Top-3 retrieval hit rate and citation-grounded answer rate against a JSON test set
+- Evaluates Top-1/Top-3 retrieval, citation grounding, paraphrased queries, and unanswerable-question refusal behavior
 
 ## Architecture
 
@@ -89,7 +91,21 @@ Run the benchmark on the same machine where Ollama and the local models are inst
 python scripts/benchmark.py
 ```
 
-It reports the current ChromaDB collection size, average end-to-end latency across five questions, total runtime for the 33-question evaluation set, and refusal accuracy on 10 unanswerable questions. Because inference is local, timing results are machine-dependent and should be reported with the hardware/model configuration used.
+The latest local benchmark measured:
+
+| Metric | Result |
+| --- | ---: |
+| ChromaDB collection count | **13** |
+| Average end-to-end latency (5 questions) | **5.554 s** |
+| Answerable questions | **43** |
+| Top-1 retrieval hit rate | **86.0%** |
+| Top-3 retrieval hit rate | **100.0%** |
+| Citation-grounded answer rate | **100.0%** |
+| Paraphrase Top-3 retrieval hit rate | **100.0%** |
+| Unanswerable refusal accuracy | **90.0% (9/10)** |
+| Evaluation runtime (53 questions) | **145.522 s (~2m 26s)** |
+
+Timing results are machine-dependent because inference runs locally. The refusal metric is an automated operational check based on the configured refusal response, not a human semantic evaluation.
 
 ## Add your own knowledge base
 
@@ -101,8 +117,11 @@ This project does not require an OpenAI key or paid API credits. Ollama keeps bo
 
 ## Evaluation metrics
 
+- **Top-1 retrieval hit rate:** whether the first retrieved source chunk came from the expected document.
 - **Top-3 retrieval hit rate:** whether one of the three retrieved source chunks came from the expected document.
 - **Citation-grounded answer rate:** whether the answer includes a citation whose source is the expected document.
+- **Paraphrase Top-3 retrieval hit rate:** Top-3 retrieval performance on reworded versions of the answerable questions.
+- **Unanswerable refusal accuracy:** the share of intentionally unanswerable questions for which the configured refusal phrase was returned.
 
 These are automated proxy metrics. For a resume-quality "correctly grounded" metric, review a fixed evaluation set and record the proportion of answers that are both factually correct and fully supported by their cited evidence.
 
