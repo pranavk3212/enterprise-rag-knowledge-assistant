@@ -8,6 +8,16 @@ from enterprise_rag.service import EnterpriseRAG
 from enterprise_rag.vector_store import VectorStore
 
 
+def _has_inline_expected_source_citation(answer: str, expected_source: str) -> bool:
+    """Check the answer body for the expected source, excluding the auto-added Sources footer.
+
+    This is a citation-presence proxy only; it does not verify that the cited passage
+    semantically supports the answer.
+    """
+    answer_body = answer.split("\n\nSources:", maxsplit=1)[0]
+    return f"[{expected_source} · chunk " in answer_body
+
+
 def ingest() -> None:
     if not DOCUMENTS_DIR.exists():
         raise FileNotFoundError(f"Document folder does not exist: {DOCUMENTS_DIR}")
@@ -36,13 +46,16 @@ def evaluate() -> None:
         retrieved_names = {source.source for source in sources}
         retrieval_hit = case["expected_source"] in retrieved_names
         result = assistant.answer(case["question"])
-        citation_hit = f"[{case['expected_source']} · chunk" in result.answer
+        citation_hit = _has_inline_expected_source_citation(result.answer, case["expected_source"])
         retrieval_hits += retrieval_hit
         citation_hits += citation_hit
-        print(f"{'PASS' if retrieval_hit else 'MISS'} retrieval | {'PASS' if citation_hit else 'MISS'} citation | {case['question']}")
+        print(
+            f"{'PASS' if retrieval_hit else 'MISS'} retrieval | "
+            f"{'PASS' if citation_hit else 'MISS'} inline citation proxy | {case['question']}"
+        )
     total = len(cases)
     print(f"\nTop-{TOP_K} retrieval hit rate: {retrieval_hits / total:.1%}")
-    print(f"Citation-grounded answer rate: {citation_hits / total:.1%}")
+    print(f"Inline expected-source citation proxy: {citation_hits / total:.1%}")
 
 
 def main() -> None:
